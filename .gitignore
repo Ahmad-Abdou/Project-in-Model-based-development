@@ -1,0 +1,14 @@
+# local eclipse workspace settings
+.metadata/
+
+# macos rubbish
+.DS_Store
+
+# windows rubbish
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+
+# linux rubbish
+.directory

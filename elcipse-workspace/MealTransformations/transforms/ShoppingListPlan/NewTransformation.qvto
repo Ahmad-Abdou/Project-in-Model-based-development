@@ -1,0 +1,39 @@
+modeltype Schedule uses "platform:/resource/MealSchedule/model/mealSchedule.ecore";
+modeltype Shopping uses "platform:/resource/ShoppingList/model/shoppingList.ecore";
+modeltype Recipes uses "platform:/resource/recipebook/model/recipebook.ecore";
+
+transformation NewTransformation(
+    in schedule : Schedule,
+    out shopping : Shopping
+);
+
+main() {
+    schedule.rootObjects()[Schedule::MealSchedule]->map toShoppingList();
+}
+
+mapping Schedule::MealSchedule::toShoppingList() : Shopping::ShoppingList {
+    result.week := self.week;
+
+    self.meals->forEach(meal) {
+        meal.recipe.ingredients->forEach(recipeIngredient) {
+            result.aisles += recipeIngredient.map toAisle(
+                meal.servings, meal.recipe.servings
+            );
+        };
+    };
+}
+
+mapping Recipes::RecipeIngredient::toAisle(
+    mealServing : Integer, recipeServing : Integer
+) : Shopping::Aisle {
+    result.name := self.ingredient.category;
+    result.items += self.map toItem(mealServing, recipeServing);
+}
+
+mapping Recipes::RecipeIngredient::toItem(
+    mealServing : Integer, recipeServing : Integer
+) : Shopping::Item {
+    result.name := self.ingredient.name;
+    result.unit := self.unit;
+    result.quantity := self.quantity * mealServing / recipeServing;
+}

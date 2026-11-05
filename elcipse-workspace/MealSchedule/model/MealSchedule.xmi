@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mealSchedule:MealSchedule
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mealSchedule="http://www.example.org/mealSchedule"
+    xsi:schemaLocation="http://www.example.org/mealSchedule mealSchedule.ecore"
+    week="5">
+  <meals day="Monday"
+      mealType="Breakfast"
+      servings="3">
+    <recipe
+        href="../../recipebook/model/RecipeBook.xmi#//@recipes.0"/>
+  </meals>
+</mealSchedule:MealSchedule>

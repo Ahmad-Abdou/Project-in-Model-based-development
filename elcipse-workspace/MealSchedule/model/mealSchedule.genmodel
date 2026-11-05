@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/MealSchedule/src-gen" creationIcons="false" editDirectory="/MealSchedule.edit/src-gen"
+    editorDirectory="/MealSchedule.editor/src-gen" modelPluginID="MealSchedule" modelName="MealSchedule"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" codeFormatting="true"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="25.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>mealSchedule.ecore</foreignModel>
+  <testsDirectory xsi:nil="true"/>
+  <genPackages prefix="MealSchedule" disposableProviderFactory="true" ecorePackage="mealSchedule.ecore#/">
+    <genClasses ecoreClass="mealSchedule.ecore#//MealSchedule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mealSchedule.ecore#//MealSchedule/week"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mealSchedule.ecore#//MealSchedule/meals"/>
+    </genClasses>
+    <genClasses ecoreClass="mealSchedule.ecore#//Meal">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mealSchedule.ecore#//Meal/day"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mealSchedule.ecore#//Meal/mealType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mealSchedule.ecore#//Meal/servings"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mealSchedule.ecore#//Meal/recipe"/>
+    </genClasses>
+  </genPackages>
+  <genPackages prefix="Recipebook" ecorePackage="../../recipebook/model/recipebook.ecore#/">
+    <genClasses ecoreClass="../../recipebook/model/recipebook.ecore#//Recipe">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//Recipe/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//Recipe/servings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//Recipe/timeToCook"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//Recipe/instructions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ../../recipebook/model/recipebook.ecore#//Recipe/ingredients"/>
+    </genClasses>
+    <genClasses ecoreClass="../../recipebook/model/recipebook.ecore#//Ingredient">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//Ingredient/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//Ingredient/category"/>
+    </genClasses>
+    <genClasses ecoreClass="../../recipebook/model/recipebook.ecore#//RecipeIngredient">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//RecipeIngredient/quantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ../../recipebook/model/recipebook.ecore#//RecipeIngredient/unit"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ../../recipebook/model/recipebook.ecore#//RecipeIngredient/ingredient"/>
+    </genClasses>
+    <genClasses ecoreClass="../../recipebook/model/recipebook.ecore#//RecipeBook">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ../../recipebook/model/recipebook.ecore#//RecipeBook/recipes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ../../recipebook/model/recipebook.ecore#//RecipeBook/ingredients"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

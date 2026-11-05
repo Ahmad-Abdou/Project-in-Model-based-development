@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shoppingList:ShoppingList xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:shoppingList="http://www.example.org/shoppingList" xsi:schemaLocation="http://www.example.org/shoppingList shoppingList.ecore" week="5">
+  <aisles name="Dry Goods">
+    <items name="Pasta" quantity="375.0" unit="gr"/>
+  </aisles>
+</shoppingList:ShoppingList>

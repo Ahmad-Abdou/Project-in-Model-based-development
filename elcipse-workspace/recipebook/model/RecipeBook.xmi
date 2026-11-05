@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recipebook:RecipeBook
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:recipebook="http://www.example.org/recipebook"
+    xsi:schemaLocation="http://www.example.org/recipebook recipebook.ecore">
+  <recipes name="PastaWithMeatballs"
+      servings="2"
+      timeToCook="10"
+      instructions="Boil it"
+      carbs="50.0"
+      protein="25.0"
+      fats="30.0"
+      kcal="500.0">
+    <ingredients
+        quantity="250.0"
+        unit="gr"
+        ingredient="//@ingredients.0"/>
+  </recipes>
+  <ingredients
+      name="Pasta"
+      category="Dry Goods"/>
+</recipebook:RecipeBook>
