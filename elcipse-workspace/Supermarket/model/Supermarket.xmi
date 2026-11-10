@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<supermarket:Supermarket
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:supermarket="http://www.example.org/supermarket"
+    xsi:schemaLocation="http://www.example.org/supermarket supermarket.ecore">
+  <products
+      name="Pasta"
+      price="15.0"
+      packageQuantity="500.0"
+      unit="gr">
+    <ingredient
+        href="../../recipebook/model/RecipeBook.xmi#//@ingredients.0"/>
+  </products>
+</supermarket:Supermarket>
