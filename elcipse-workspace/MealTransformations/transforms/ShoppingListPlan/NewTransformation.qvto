@@ -1,9 +1,11 @@
 modeltype Schedule uses "platform:/resource/MealSchedule/model/mealSchedule.ecore";
 modeltype Shopping uses "platform:/resource/ShoppingList/model/shoppingList.ecore";
 modeltype Recipes uses "platform:/resource/recipebook/model/recipebook.ecore";
+modeltype Store uses "platform:/resource/Supermarket/model/supermarket.ecore";
 
 transformation NewTransformation(
     in schedule : Schedule,
+    in supermarket : Store,
     out shopping : Shopping
 );
 
