@@ -1,0 +1,42 @@
+[comment encoding = UTF-8 /]
+[module MealScheduleToHTML('http://www.example.org/mealSchedule', 'http://www.example.org/recipebook')/]
+
+[comment @main/]
+[template public generateWeeklyMenu(schedule : mealSchedule::MealSchedule)]
+[file ('weekly-menu.html', overwrite, 'UTF-8')]
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+		  <meta charset="UTF-8">
+		  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		  <title>Weekly Menu - Week [schedule.week/]</title>
+		  <style>
+		    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; background: #f7f8fa; color: #1f2937; }
+		    h1 { color: #0f766e; }
+		    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+		    .meta { color: #6b7280; font-size: 0.9rem; margin-bottom: 0.75rem; }
+		    ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+		  </style>
+		</head>
+		<body>
+		  <h1>Weekly Menu &mdash; Week [schedule.week/]</h1>
+[for (m : mealSchedule::Meal | schedule.meals)]
+  [let r : recipebook::Recipe = m.recipe]
+		  <article class="card">
+		    <h2>[m.day/] &mdash; [m.mealType/]</h2>
+		    <div class="meta"><strong>[r.name/]</strong> &middot; [m.servings/] servings &middot; [r.timeToCook/] min</div>
+		    <h3>Ingredients</h3>
+		    <ul>
+		      [for (ri : recipebook::RecipeIngredient | r.ingredients)]
+				      <li>[ri.ingredient.name/]: [(ri.quantity * m.servings.toString().toReal()) / r.servings.toString().toReal()/] [ri.unit/]</li>
+		      [/for]
+		    </ul>
+		    <h3>Instructions</h3>
+		    <p>[r.instructions/]</p>
+		  </article>
+  [/let]
+[/for]
+		</body>
+		</html>
+[/file]
+[/template]

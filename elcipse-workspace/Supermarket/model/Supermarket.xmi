@@ -4,7 +4,7 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:supermarket="http://www.example.org/supermarket"
-    xsi:schemaLocation="http://www.example.org/supermarket supermarket.ecore">
+    xsi:schemaLocation="http://www.example.org/supermarket platform:/resource/Supermarket/model/supermarket.ecore">
   <products
       name="Pasta"
       price="15.0"
@@ -12,5 +12,50 @@
       unit="gr">
     <ingredient
         href="../../recipebook/model/RecipeBook.xmi#//@ingredients.0"/>
+  </products>
+  <products
+      name="Tomatoe"
+      price="3.0"
+      packageQuantity="300.0"
+      unit="gr">
+    <ingredient
+        href="../../recipebook/model/RecipeBook.xmi#//@ingredients.1"/>
+  </products>
+  
+    <products
+      name="Rice"
+      price="10.0"
+      packageQuantity="1000.0"
+      unit="gr">
+    <ingredient
+        href="../../recipebook/model/RecipeBook.xmi#//@ingredients.2"/>
+  </products>
+  
+    <products
+      name="Pepper"
+      price="7.0"
+      packageQuantity="500.0"
+      unit="gr">
+    <ingredient
+        href="../../recipebook/model/RecipeBook.xmi#//@ingredients.3"/>
+  </products>
+  
+  
+    <products
+      name="Onion"
+      price="2.0"
+      packageQuantity="500.0"
+      unit="gr">
+    <ingredient
+        href="../../recipebook/model/RecipeBook.xmi#//@ingredients.4"/>
+  </products>
+  
+    <products
+      name="Oil"
+      price="12.0"
+      packageQuantity="500.0"
+      unit="ml">
+    <ingredient
+        href="../../recipebook/model/RecipeBook.xmi#//@ingredients.5"/>
   </products>
 </supermarket:Supermarket>

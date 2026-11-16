@@ -16,26 +16,50 @@ main() {
 mapping Schedule::MealSchedule::toShoppingList() : Shopping::ShoppingList {
     result.week := self.week;
 
+    var products := supermarket.objectsOfType(Store::Product);
     self.meals->forEach(meal) {
-        meal.recipe.ingredients->forEach(recipeIngredient) {
-            result.aisles += recipeIngredient.map toAisle(
-                meal.servings, meal.recipe.servings
+        meal.recipe.ingredients->forEach(ri) {
+            var catName : String := ri.ingredient.category;
+            var ingName : String := ri.ingredient.name;
+            var ingUnit : String := ri.unit;
+            var scaledQty : Real := ri.quantity * meal.servings / meal.recipe.servings;
+
+            // 1. Find or create the Aisle for this category
+            var aisle : Shopping::Aisle := result.aisles->any(a | a.name = catName);
+            if (aisle = null) {
+                aisle := object Shopping::Aisle {
+                    name := catName;
+                };
+                result.aisles += aisle;
+            };
+
+            // 2. Find or create the Item, and sum its quantity
+            var item : Shopping::Item := aisle.items->any(
+                i | i.name = ingName and i.unit = ingUnit
             );
+            if (item = null) {
+                item := object Shopping::Item {
+                    name := ingName;
+                    unit := ingUnit;
+                    quantity := scaledQty;
+                };
+                aisle.items += item;
+            } else {
+                item.quantity := item.quantity + scaledQty;
+            };
+
+            // 3. Calculate package price from Supermarket (if a matching Product exists)
+            var prod : Store::Product := products->any(p |
+                p.ingredient = ri.ingredient and p.unit = ingUnit and p.packageQuantity > 0
+            );
+            if (prod <> null) {
+                var ratio : Real := item.quantity / prod.packageQuantity;
+                var packages : Integer := ratio.floor();
+                if (ratio > packages) {
+                    packages := packages + 1;
+                };
+                item.price := packages * prod.price;
+            };
         };
     };
-}
-
-mapping Recipes::RecipeIngredient::toAisle(
-    mealServing : Integer, recipeServing : Integer
-) : Shopping::Aisle {
-    result.name := self.ingredient.category;
-    result.items += self.map toItem(mealServing, recipeServing);
-}
-
-mapping Recipes::RecipeIngredient::toItem(
-    mealServing : Integer, recipeServing : Integer
-) : Shopping::Item {
-    result.name := self.ingredient.name;
-    result.unit := self.unit;
-    result.quantity := self.quantity * mealServing / recipeServing;
 }

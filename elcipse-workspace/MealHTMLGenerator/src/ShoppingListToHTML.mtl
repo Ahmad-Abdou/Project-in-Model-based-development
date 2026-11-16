@@ -1,0 +1,39 @@
+[comment encoding = UTF-8 /]
+[module ShoppingListToHTML('http://www.example.org/shoppingList')/]
+[comment @main/]
+[template public generateShoppingList(list : shoppingList::ShoppingList)]
+[file ('shopping-list.html', overwrite, 'UTF-8')]
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+		  <meta charset="UTF-8">
+		  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		  <title>Shopping List &mdash; Week [list.week/]</title>
+		  <style>
+		    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; background: #f7f8fa; color: #1f2937; }
+		    h1 { color: #0f766e; }
+		    .aisle { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+		    .aisle h2 { margin: 0 0 0.75rem; font-size: 1.1rem; color: #0f766e; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.4rem; }
+		    label { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; cursor: pointer; }
+		    .price { color: #6b7280; font-size: 0.9rem; }
+		  </style>
+		</head>
+		<body>
+		  <h1>Shopping List &mdash; Week [list.week/]</h1>
+		  [for (a : shoppingList::Aisle | list.aisles)]
+				  <section class="aisle">
+				    <h2>[a.name/]</h2>
+				    [for (i : shoppingList::Item | a.items)]
+						    <label>
+						      <span><input type="checkbox"> <strong>[i.name/]</strong> &mdash; [i.quantity/] [i.unit/]</span>
+						      [if (i.price <> null and i.price > 0.0)]
+								      <span class="price">[i.price/] kr</span>
+						      [/if]
+						    </label>
+				    [/for]
+				  </section>
+		  [/for]
+		</body>
+		</html>
+[/file]
+[/template]

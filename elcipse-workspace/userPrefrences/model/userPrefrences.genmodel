@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/userPrefrences/src-gen" creationIcons="false"
+    editDirectory="/userPrefrences.edit/src-gen" editorDirectory="/userPrefrences.editor/src-gen"
+    modelPluginID="userPrefrences" modelName="UserPrefrences" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="15.0"
+    copyrightFields="false" usedGenPackages="../../recipebook/model/recipebook.genmodel#//recipebook"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>userPrefrences.ecore</foreignModel>
+  <testsDirectory xsi:nil="true"/>
+  <genPackages prefix="UserPrefrences" disposableProviderFactory="true" ecorePackage="userPrefrences.ecore#/">
+    <genClasses ecoreClass="userPrefrences.ecore#//UserPrefrences">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute userPrefrences.ecore#//UserPrefrences/numberOfPeople"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute userPrefrences.ecore#//UserPrefrences/weeklyBudget"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute userPrefrences.ecore#//UserPrefrences/maxCookingTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute userPrefrences.ecore#//UserPrefrences/maxKcal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute userPrefrences.ecore#//UserPrefrences/daysPerWeek"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference userPrefrences.ecore#//UserPrefrences/excludeIngredients"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

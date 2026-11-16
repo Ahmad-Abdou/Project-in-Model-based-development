@@ -4,12 +4,18 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:mealSchedule="http://www.example.org/mealSchedule"
-    xsi:schemaLocation="http://www.example.org/mealSchedule mealSchedule.ecore"
+    xsi:schemaLocation="http://www.example.org/mealSchedule platform:/resource/MealSchedule/model/mealSchedule.ecore"
     week="5">
   <meals day="Monday"
       mealType="Breakfast"
       servings="3">
     <recipe
         href="../../recipebook/model/RecipeBook.xmi#//@recipes.0"/>
+  </meals>
+    <meals day="Tuesday"
+      mealType="Lunch"
+      servings="3">
+    <recipe
+        href="../../recipebook/model/RecipeBook.xmi#//@recipes.1"/>
   </meals>
 </mealSchedule:MealSchedule>

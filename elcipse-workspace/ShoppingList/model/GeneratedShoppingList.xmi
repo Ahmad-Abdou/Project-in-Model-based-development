@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shoppingList:ShoppingList xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:shoppingList="http://www.example.org/shoppingList" xsi:schemaLocation="http://www.example.org/shoppingList shoppingList.ecore" week="5">
   <aisles name="Dry Goods">
-    <items name="Pasta" quantity="375.0" unit="gr"/>
+    <items name="Pasta" quantity="375.0" unit="gr" price="15.0"/>
+    <items name="Rice" quantity="1000.0" unit="gr" price="10.0"/>
+  </aisles>
+  <aisles name="Vegetables">
+    <items name="Tomato" quantity="300.0" unit="gr" price="3.0"/>
+    <items name="Pepper" quantity="400.0" unit="gr" price="7.0"/>
+    <items name="Onion" quantity="150.0" unit="gr" price="2.0"/>
+  </aisles>
+  <aisles name="Pantry">
+    <items name="Oil" quantity="100.0" unit="ml" price="12.0"/>
   </aisles>
 </shoppingList:ShoppingList>

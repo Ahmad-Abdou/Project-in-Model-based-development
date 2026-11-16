@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userPrefrences:UserPrefrences
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:userPrefrences="http://www.example.org/userPrefrences"
+    xsi:schemaLocation="http://www.example.org/userPrefrences userPrefrences.ecore"
+    numberOfPeople="3"
+    weeklyBudget="200.0"
+    maxCookingTime="30"
+    maxKcal="800.0"
+    daysPerWeek="5">
+  <excludeIngredients
+      href="../../recipebook/model/RecipeBook.xmi#//@ingredients.1"/>
+</userPrefrences:UserPrefrences>

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<recipebook:RecipeBook xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:recipebook="http://www.example.org/recipebook" xsi:schemaLocation="http://www.example.org/recipebook recipebook.ecore">
-  <recipes name="PastaWithMeatballs" servings="2" timeToCook="10" instructions="Boil it" carbs="50.0" protein="25.0" fats="30.0" kcal="500.0">
+<recipebook:RecipeBook xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:recipebook="http://www.example.org/recipebook" xsi:schemaLocation="http://www.example.org/recipebook platform:/resource/recipebook/model/recipebook.ecore">
+  <recipes name="PastaWithMeatballs" servings="2" timeToCook="10" instructions="Mix seasoned ground meat into small balls and simmer them in a tomato sauce while boiling pasta. Toss the cooked pasta directly into the meatball sauce and serve hot" carbs="50.0" protein="25.0" fats="30.0" kcal="500.0">
     <ingredients quantity="250.0" unit="gr" ingredient="//@ingredients.0"/>
     <ingredients quantity="200.0" unit="gr" ingredient="//@ingredients.1"/>
   </recipes>
+   <recipes name="V_Byriani" servings="3" timeToCook="30" instructions="Sauté sliced onions and peppers in oil until soft, then mix in spices and cooked basmati rice. Cover and steam on low heat for a few minutes until warm and well combined" carbs="150.0" protein="30.0" fats="45.0" kcal="650.0">
+    <ingredients quantity="1000.0" unit="gr" ingredient="//@ingredients.2"/>
+    <ingredients quantity="400.0" unit="gr" ingredient="//@ingredients.3"/>
+    <ingredients quantity="150.0" unit="gr" ingredient="//@ingredients.4"/>
+    <ingredients quantity="100.0" unit="ml" ingredient="//@ingredients.5"/>
+  </recipes>
   <ingredients name="Pasta" category="Dry Goods"/>
   <ingredients name="Tomato" category="Vegetables"/>
+  <ingredients name="Rice" category="Dry Goods"/>
+  <ingredients name="Pepper" category="Vegetables"/>
+  <ingredients name="Onion" category="Vegetables"/>
+  <ingredients name="Oil" category="Pantry"/>
 </recipebook:RecipeBook>
