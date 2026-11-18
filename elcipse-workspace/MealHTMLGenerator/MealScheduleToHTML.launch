@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.acceleo.aql.ls.debug.ide.launchConfigurationType">
+    <stringAttribute key="destination" value="/MealHTMLGenerator/generated"/>
+    <stringAttribute key="model" value="/MealSchedule/model/MealSchedule.xmi"/>
+    <stringAttribute key="module" value="/MealHTMLGenerator/src/MealScheduleToHTML.mtl"/>
+    <stringAttribute key="options" value="{&quot;logURI&quot;:&quot;MealScheduleToHTML.log&quot;}"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/MealHTMLGenerator/src/MealScheduleToHTML.mtl"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.lsp4e.debug.model.ATTR_CUSTOM_LAUNCH_PARAMS" value="true"/>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_MODE" value="connect to server"/>
+    <booleanAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_MONITOR_ADAPTER" value="true"/>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_PARAM" value="{&quot;module&quot;:&quot;file:/C:/Users/ahmad/Desktop/project%20course/Project-in-Model-based-development/elcipse-workspace/MealHTMLGenerator/src/MealScheduleToHTML.mtl&quot;,&quot;model&quot;:&quot;file:/C:/Users/ahmad/Desktop/project%20course/Project-in-Model-based-development/elcipse-workspace/MealSchedule/model/MealSchedule.xmi&quot;,&quot;destination&quot;:&quot;file:/C:/Users/ahmad/Desktop/project%20course/Project-in-Model-based-development/elcipse-workspace/MealHTMLGenerator/generated/&quot;,&quot;options&quot;:&quot;{\&quot;logURI\&quot;:\&quot;MealScheduleToHTML.log\&quot;}&quot;}"/>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_SERVER_HOST" value="127.0.0.1"/>
+    <intAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_SERVER_PORT" value="59975"/>
+</launchConfiguration>

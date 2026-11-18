@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meal planning | Project walkthrough</title>
+<style>
+:root { color-scheme: light; --ink:#172a32; --muted:#4f6167; --navy:#102a36; --teal:#00675d; --mint:#d9f1e7; --paper:#f6f7f2; --line:#d4ded8; --white:#fff; --amber:#fff2d8; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:5rem; }
+body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 "Inter",system-ui,sans-serif; }
+a { color:var(--teal); }
+a:hover { text-decoration-thickness:2px; }
+button,input { font:inherit; accent-color:var(--teal); }
+button { cursor:pointer; }
+:focus-visible { outline:3px solid #008777; outline-offset:4px; }
+.wrap { width:min(1120px,calc(100% - 40px)); margin:auto; }
+header { background:var(--navy); color:white; padding:48px 0; }
+header p { color:#d9e9e9; max-width:720px; font-size:1.1rem; }
+h1,h2,h3 { line-height:1.16; letter-spacing:-.035em; }
+h1 { font-size:clamp(2.65rem,7vw,5.3rem); margin:8px 0 16px; }
+h2 { font-size:clamp(1.9rem,4vw,2.8rem); margin:0 0 14px; }
+h3 { font-size:1.25rem; margin:0 0 10px; }
+.kicker { color:#a5e5d1; font-size:.82rem; font-weight:750; letter-spacing:.1em; text-transform:uppercase; }
+nav { position:sticky; top:0; z-index:1; background:var(--white); border-bottom:1px solid var(--line); }
+nav .wrap { display:flex; gap:22px; overflow:auto; padding:13px 0; white-space:nowrap; }
+nav a { font-size:.9rem; font-weight:720; text-decoration:none; }
+section { padding:44px 0; border-bottom:1px solid var(--line); }
+p { margin:0 0 14px; }
+p:last-child { margin-bottom:0; }
+.lead { max-width:780px; color:var(--muted); }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:18px 0; }
+.panel, details { background:var(--white); border:1px solid var(--line); border-radius:12px; padding:18px 20px; min-width:0; }
+details { margin:10px 0; }
+summary { font-weight:750; cursor:pointer; }
+details[open] summary { margin-bottom:13px; }
+.note { background:var(--amber); border-left:4px solid #ac7827; padding:14px 18px; margin:16px 0; }
+.flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:12px; align-items:center; margin:22px 0; }
+.flow .panel { border-top:4px solid var(--teal); }
+.arrow { color:var(--teal); font-size:1.4rem; font-weight:bold; text-align:center; }
+.caption { font-size:.9rem; color:var(--muted); }
+code,pre { font-family:"IBM Plex Mono",Consolas,monospace; }
+code { overflow-wrap:anywhere; font-size:.91em; }
+pre { background:#122e3a; color:#e9faf5; border-radius:9px; padding:16px; overflow:auto; font-size:.88rem; line-height:1.6; margin:12px 0; }
+table { width:100%; border-collapse:collapse; text-align:left; }
+th,td { border-bottom:1px solid var(--line); padding:10px 12px; vertical-align:top; }
+th { background:#eaf2ed; }
+.table-scroll { overflow:auto; }
+.relations { margin:14px 0; display:grid; gap:8px; }
+.relation { display:grid; grid-template-columns:minmax(90px,1fr) minmax(110px,1.4fr) minmax(90px,1fr); align-items:center; text-align:center; gap:5px; }
+.node { background:var(--mint); padding:9px 6px; border:1px solid #b5d8cc; border-radius:7px; overflow-wrap:anywhere; }
+.edge { color:var(--teal); font-size:.85rem; font-weight:700; }
+figure { margin:0; }
+figure img { display:block; max-width:100%; max-height:65vh; object-fit:contain; margin:auto; }
+figcaption { margin-top:10px; color:var(--muted); }
+.trace { border-top:4px solid var(--teal); }
+.trace label { display:block; font-weight:700; }
+.trace input { width:min(100%,380px); }
+.controls { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+.controls button { background:#fff; border:1px solid #abc8bf; border-radius:7px; padding:7px 12px; color:var(--ink); }
+.controls button[aria-pressed="true"] { background:var(--teal); color:white; border-color:var(--teal); }
+#trace-output { background:var(--mint); border-radius:8px; padding:14px; min-height:80px; }
+li + li { margin-top:7px; }
+footer { padding:24px 0; color:var(--muted); font-size:.9rem; }
+@media(max-width:690px) { .grid,.flow { grid-template-columns:1fr; } .arrow { transform:rotate(90deg); } section { padding:32px 0; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="kicker">Model-based development · Group project</div>
+<h1>How our meal planner works</h1>
+<p>The project turns a meal schedule into a shopping list. The schedule tells us what to cook, the recipe book tells us what it takes, and the transformation calculates what we need to buy. The supermarket model adds information about what the shop sells.</p>
+</div></header>
+<nav aria-label="Guide sections"><div class="wrap">
+<a href="#overview">Overview</a><a href="#models">Models and diagrams</a><a href="#qvto">QVTo walkthrough</a><a href="#update">Teammate’s update</a><a href="#meeting">Meeting preparation</a>
+</div></nav>
+<main class="wrap">
+<section id="overview">
+<h2>How the project uses models</h2>
+<p>In model-based development, we define the structure of the data, create models that follow that structure, and write transformations that work with those models. In our project, the model for a planned meal specifies its day, servings, and recipe. QVTo reads that information and creates a shopping-list model.</p>
+<div class="flow" aria-label="Meal schedule flows through QVTo to a shopping list">
+<div class="panel"><h3>Meal schedule</h3><p>Week 5 includes a Monday meal for 3 servings. It points to a recipe in <code>RecipeBook.xmi</code>.</p></div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="panel"><h3>QVTo transformation</h3><p>Follow the recipe link, read the ingredient amounts, and scale them from 2 to 3 servings.</p></div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="panel"><h3>Shopping list</h3><p>Record how much of each ingredient is needed and place each entry under its category.</p></div>
+</div>
+<div class="table-scroll"><table>
+<thead><tr><th>File type</th><th>What it does here</th><th>Project example</th></tr></thead>
+<tbody>
+<tr><td><strong>Metamodel</strong> <code>.ecore</code></td><td>Defines the classes, fields, and relationships.</td><td><code>mealSchedule.ecore</code> defines that a meal has a <code>servings</code> field and a link to a <code>Recipe</code>.</td></tr>
+<tr><td><strong>Model</strong> <code>.xmi</code></td><td>Stores actual objects and values that follow a metamodel.</td><td><code>MealSchedule.xmi</code> stores the Monday meal with <code>servings="3"</code>.</td></tr>
+<tr><td><strong>Transformation</strong> <code>.qvto</code></td><td>Defines the rules for producing an output model.</td><td><code>NewTransformation.qvto</code> calculates ingredient amounts and creates list entries.</td></tr>
+<tr><td><strong>Run configuration</strong> <code>.launch</code></td><td>Stores the Eclipse settings that bind the transformation to specific files.</td><td><code>NewTransformation.launch</code> uses <code>MealSchedule.xmi</code> and writes <code>GeneratedShoppingList.xmi</code>.</td></tr>
+<tr><td><strong>Representation</strong> <code>.aird</code> / <code>.png</code></td><td>A Sirius representation file stores diagram information. A PNG is an image you can view without Eclipse.</td><td><code>mealSchedule.aird</code> and the images in the repository’s <code>diagrams</code> folder.</td></tr>
+</tbody></table></div>
+</section>
+<section id="models">
+<h2>The four metamodels</h2>
+<p class="lead">Each box below names an Ecore class. Each arrow shows a reference from one class to another. A containment reference owns its children. A regular reference points to an existing object. <code>0..*</code> means zero or more, <code>0..1</code> means optional, and <code>1</code> means exactly one.</p>
+<div class="grid">
+<article class="panel">
+<h3>Recipe book</h3>
+<div class="relations">
+<div class="relation"><b class="node">RecipeBook</b><span class="edge">owns 0..* →</span><b class="node">Recipe</b></div>
+<div class="relation"><b class="node">RecipeBook</b><span class="edge">owns 0..* →</span><b class="node">Ingredient</b></div>
+<div class="relation"><b class="node">Recipe</b><span class="edge">owns 0..* →</span><b class="node">RecipeIngredient</b></div>
+<div class="relation"><b class="node">RecipeIngredient</b><span class="edge">refers to 1 →</span><b class="node">Ingredient</b></div>
+</div>
+<p><code>Ingredient</code> stores the food’s name and category. <code>RecipeIngredient</code> stores the quantity and unit for a particular recipe. The Pasta entry belongs to the recipe book, and the recipe links to it through a row specifying 250 gr.</p>
+<p class="caption"><a href="elcipse-workspace/recipebook/model/recipebook.ecore">recipebook.ecore</a> · <a href="elcipse-workspace/recipebook/model/RecipeBook.xmi">RecipeBook.xmi</a></p>
+</article>
+<article class="panel">
+<h3>Meal schedule</h3>
+<div class="relations">
+<div class="relation"><b class="node">MealSchedule</b><span class="edge">owns 0..* →</span><b class="node">Meal</b></div>
+<div class="relation"><b class="node">Meal</b><span class="edge">refers to 1 →</span><b class="node">Recipe</b></div>
+</div>
+<p>The schedule stores the week number. Each meal stores a day, meal type, serving count, and recipe reference. The Monday entry points to <code>PastaWithMeatballs</code> in the recipe book. Its 3 servings tell QVTo how much food to plan for.</p>
+<p class="caption"><a href="elcipse-workspace/MealSchedule/model/mealSchedule.ecore">mealSchedule.ecore</a> · <a href="elcipse-workspace/MealSchedule/model/MealSchedule.xmi">MealSchedule.xmi</a></p>
+</article>
+<article class="panel">
+<h3>Shopping list</h3>
+<div class="relations">
+<div class="relation"><b class="node">ShoppingList</b><span class="edge">owns 0..* →</span><b class="node">Aisle</b></div>
+<div class="relation"><b class="node">Aisle</b><span class="edge">owns 0..* →</span><b class="node">Item</b></div>
+</div>
+<p>The list has a week. Each aisle has a name, and each item has a name, quantity, and unit. The metamodel has an optional item price. The checked-out transformation leaves it empty.</p>
+<p class="caption"><a href="elcipse-workspace/ShoppingList/model/shoppingList.ecore">shoppingList.ecore</a> · <a href="elcipse-workspace/ShoppingList/model/GeneratedShoppingList.xmi">GeneratedShoppingList.xmi</a></p>
+</article>
+<article class="panel">
+<h3>Supermarket</h3>
+<div class="relations">
+<div class="relation"><b class="node">Supermarket</b><span class="edge">owns 0..* →</span><b class="node">Product</b></div>
+<div class="relation"><b class="node">Product</b><span class="edge">refers to 0..1 →</span><b class="node">Ingredient</b></div>
+</div>
+<p>A product stores a name, package quantity, unit, and price. Your test product is 500 gr of Pasta at a price of 15. It points to the same Pasta ingredient used by the recipe. The model stores the number 15 without a currency field.</p>
+<p class="caption"><a href="elcipse-workspace/Supermarket/model/supermarket.ecore">supermarket.ecore</a> · <a href="elcipse-workspace/Supermarket/model/Supermarket.xmi">Supermarket.xmi</a></p>
+</article>
+</div>
+<h3>Diagrams from the repository</h3>
+<p>Expand a diagram and click the image to open it at full size. The supermarket relationships are shown above from the Ecore file. The checked-out repository has no supermarket diagram image.</p>
+<details open><summary>Recipe book diagram</summary><figure><a href="diagrams/RecipeBookMM.png"><img src="diagrams/RecipeBookMM.png" alt="Repository diagram of the recipe book metamodel"></a><figcaption>Follow Recipe → RecipeIngredient → Ingredient to see where the amount and food name come from.</figcaption></figure></details>
+<details><summary>Meal schedule diagram</summary><figure><a href="diagrams/MealSceduleMM.png"><img loading="lazy" src="diagrams/MealSceduleMM.png" alt="Repository diagram of the meal schedule metamodel"></a><figcaption>Find the meal’s serving count and its recipe reference.</figcaption></figure></details>
+<details><summary>Shopping list diagram</summary><figure><a href="diagrams/ShoppingListMM.png"><img loading="lazy" src="diagrams/ShoppingListMM.png" alt="Repository diagram of the shopping list metamodel"></a><figcaption>Follow ShoppingList → Aisle → Item to see where the transformed data is stored.</figcaption></figure></details>
+</section>
+<section id="qvto">
+<h2>Read the QVTo transformation</h2>
+<p><strong>QVTo</strong> is the operational part of QVT, which stands for Query/View/Transformation. We use it for a model-to-model transformation. In this project, a run reads an XMI model and creates another XMI model using rules written in <code>NewTransformation.qvto</code>.</p>
+<div class="grid">
+<article class="panel"><h3>Which models can the code work with?</h3>
+<pre><code>transformation NewTransformation(
+    in schedule : Schedule,
+    out shopping : Shopping
+);</code></pre>
+<p><code>in</code> declares the input supplied when the code runs. <code>out</code> declares the output it creates. The <code>modeltype</code> declarations above this header identify the Ecore metamodels for Schedule, Shopping, and Recipes. Recipe data comes through the meal’s reference to the recipe book.</p>
+</article>
+<article class="panel"><h3>Where does it start?</h3>
+<pre><code>schedule.rootObjects()[Schedule::MealSchedule]
+    -&gt;map toShoppingList();</code></pre>
+<p><code>main()</code> selects the top-level <code>MealSchedule</code> and applies <code>toShoppingList</code>. A mapping is a named rule that takes a source object and creates a target object. This mapping copies week 5 and loops through each meal and its recipe ingredients.</p>
+</article>
+<article class="panel"><h3>How does it choose an aisle?</h3>
+<pre><code>result.name := self.ingredient.category;
+result.items += self.map toItem(
+    mealServing, recipeServing);</code></pre>
+<p>Inside <code>toAisle</code>, <code>self</code> is the source recipe ingredient and <code>result</code> is the new aisle. The code takes the food’s category, such as Dry Goods, and adds the item created by <code>toItem</code>.</p>
+</article>
+<article class="panel"><h3>How does it calculate the amount?</h3>
+<pre><code>result.name := self.ingredient.name;
+result.unit := self.unit;
+result.quantity :=
+    self.quantity * mealServing / recipeServing;</code></pre>
+<p><code>toItem</code> copies the food’s name and unit. For Pasta, 250 gr is the recipe amount for two servings. The schedule asks for three servings, so the result is 375 gr.</p>
+</article>
+</div>
+<div class="panel trace">
+<h3>Follow the checked-out data through the rules</h3>
+<label for="servings">Planned servings <output id="serving-count" for="servings">3</output></label>
+<input type="range" id="servings" min="1" max="10" value="3">
+<p class="caption">3 is the value in the saved schedule. The slider runs the same arithmetic here in the page.</p>
+<div class="controls" aria-label="Transformation steps">
+<button data-step="0" aria-pressed="true">1. Read the meal</button>
+<button data-step="1" aria-pressed="false">2. Follow the recipe</button>
+<button data-step="2" aria-pressed="false">3. Scale quantities</button>
+<button data-step="3" aria-pressed="false">4. Create the list</button>
+</div>
+<div id="trace-output" aria-live="polite">The schedule contains a Monday meal in week 5, linked to PastaWithMeatballs, with 3 planned servings.</div>
+</div>
+<div class="note"><strong>Saved output vs. expected output.</strong> The checked-in <code>GeneratedShoppingList.xmi</code> contains only 375 gr of Pasta. With the current recipe book and the same schedule, the rules should also produce 300 gr of Tomato. This walkthrough follows the code and the data. It does not represent a fresh Eclipse run.</div>
+<p>The current code creates a separate aisle and item for each recipe ingredient in each meal. If two meals need pasta, it creates two entries. It leaves product matching, package counts, and prices for future work in this checkout.</p>
+<p class="caption"><a href="elcipse-workspace/MealTransformations/transforms/ShoppingListPlan/NewTransformation.qvto">Open the full QVTo file</a> · <a href="elcipse-workspace/MealTransformations/NewTransformation.launch">Open the launch configuration</a></p>
+</section>
+<section id="update">
+<h2>What your teammate’s update could mean</h2>
+<blockquote>“I added it to qvto input and generated its diagram”</blockquote>
+<p>From the conversation, <strong>“it” most likely refers to the supermarket model</strong>. There are separate changes to look for when you review their work together.</p>
+<div class="table-scroll"><table>
+<thead><tr><th>Where to look</th><th>What it would show</th></tr></thead>
+<tbody>
+<tr><td><code>NewTransformation.qvto</code> header</td><td>A new supermarket <code>modeltype</code> identifies its Ecore file. A new <code>in</code> parameter lets the transformation receive a supermarket model.</td></tr>
+<tr><td><code>NewTransformation.launch</code></td><td>The input parameter is connected to an actual data file, such as <code>Supermarket.xmi</code>.</td></tr>
+<tr><td>QVTo mapping bodies</td><td>Rules that read products, match their ingredient references, or use package sizes and prices show what the new input actually does.</td></tr>
+<tr><td>Diagram file or image</td><td>A metamodel diagram can show <code>Supermarket</code>, <code>Product</code>, and the reference to <code>Ingredient</code>. Ask your teammate which diagram they generated and where it lives.</td></tr>
+</tbody></table></div>
+<p class="note"><strong>What I could verify.</strong> The local QVTo file declares only the schedule as a direct input. The local launch file binds the schedule and the output list. The Git remote was unreachable from this environment, so the teammate’s revision and diagram remain unverified.</p>
+<h3>How the supermarket data could be used</h3>
+<p>From the project’s own values, the meal needs 375 gr of pasta, and the linked product comes in a 500 gr package priced at 15. If the group decides to buy whole packages, that requires one package and costs 15. The sample has a tomato ingredient but no tomato product, so these data alone only support a pasta price. Seeing the new input in the header tells you the file can be passed in. Reading the mappings and examining the output tells you whether package pricing works.</p>
+</section>
+<section id="meeting">
+<h2>What to discuss at the meeting</h2>
+<div class="grid">
+<article class="panel"><h3>Where we are</h3>
+<ul><li>All four Ecore metamodels exist locally.</li><li>There are recipe, schedule, and supermarket examples. The saved shopping list is a generated example. Confirm whether the group has a separate manual list for the teacher’s model-checking task.</li><li>You added the supermarket metamodel, linked the 500 gr Pasta product to the existing Pasta ingredient, and added tomato to the recipe example.</li></ul>
+</article>
+<article class="panel"><h3>Decisions to make together</h3>
+<ul><li>Review your teammate’s QVTo change and diagram. Run their version and inspect what it produces for Pasta and Tomato.</li><li>Decide how the list should combine repeated ingredients and handle foods with no matching product.</li><li>Agree on simple inputs the user can give. Number of people affects servings, available cooking time helps filter recipes, and a weekly budget becomes useful once the team can calculate cost.</li></ul>
+</article>
+</div>
+<details><summary>How to explain your contribution in the meeting</summary><p>I added the supermarket metamodel and tested it with a pasta product. The product stores the price and package size and points to the Pasta ingredient used by recipes. Our transformation already turns a schedule into a list of ingredient quantities. I’d like to see how the new supermarket input is connected and what the updated transformation does with it.</p></details>
+</section>
+</main>
+<footer class="wrap">Based on the checked-out Ecore, XMI, QVTo, and Eclipse launch files. The repository diagrams open locally.</footer>
+<script>
+const servings = document.querySelector('#servings');
+const count = document.querySelector('#serving-count');
+const output = document.querySelector('#trace-output');
+const buttons = [...document.querySelectorAll('[data-step]')];
+let selectedStep = 0;
+
+function renderTrace() {
+    const planned = Number(servings.value);
+    const pasta = 250 * planned / 2;
+    const tomato = 200 * planned / 2;
+    const descriptions = [
+        `The schedule contains a Monday meal in week 5, linked to PastaWithMeatballs, with ${planned} planned servings.`,
+        'PastaWithMeatballs is written for 2 servings. Its recipe rows specify 250 gr Pasta (Dry Goods) and 200 gr Tomato (Vegetables).',
+        `Pasta: 250 × ${planned} ÷ 2 = ${pasta} gr. Tomato: 200 × ${planned} ÷ 2 = ${tomato} gr.`,
+        `Expected entries for week 5: Dry Goods → Pasta (${pasta} gr), Vegetables → Tomato (${tomato} gr).`
+    ];
+    count.value = planned;
+    output.textContent = descriptions[selectedStep];
+    buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(index === selectedStep)));
+}
+
+buttons.forEach((button, index) => button.addEventListener('click', () => {
+    selectedStep = index;
+    renderTrace();
+}));
+servings.addEventListener('input', renderTrace);
+renderTrace();
+</script>
+</body>
+</html>
