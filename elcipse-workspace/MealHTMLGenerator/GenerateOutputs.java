@@ -1,6 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Random;
 import org.eclipse.acceleo.Module;
 import org.eclipse.acceleo.aql.AcceleoUtil;
 import org.eclipse.acceleo.aql.evaluation.AcceleoEvaluator;
@@ -30,16 +31,19 @@ class GenerateOutputs {
         Path workspace = Path.of(args[0]).toAbsolutePath();
         Path outputDirectory = Files.createDirectories(Path.of(args[1]).toAbsolutePath());
         URI output = URI.createFileURI(outputDirectory.toString()).appendSegment("");
+
         var resources = new ResourceSetImpl();
         var factories = resources.getResourceFactoryRegistry().getExtensionToFactoryMap();
         factories.put("ecore", new EcoreResourceFactoryImpl());
         factories.put("xmi", new XMIResourceFactoryImpl());
 
-        // Keep QVTo's platform:/resource references portable outside Eclipse.
         URIConverter.URI_MAP.put(URI.createURI("platform:/resource/"),
                 URI.createFileURI(workspace.toString()).appendSegment(""));
+
         for (String metamodel : new String[] {
                 "recipebook/model/recipebook.ecore",
+                "userPrefrences/model/userPrefrences.ecore",
+                "CandidateRecipes/model/candidateRecipes.ecore",
                 "MealSchedule/model/mealSchedule.ecore",
                 "Supermarket/model/supermarket.ecore",
                 "ShoppingList/model/shoppingList.ecore"
@@ -50,31 +54,84 @@ class GenerateOutputs {
             resources.getPackageRegistry().put("platform:/resource/" + metamodel, type);
         }
 
-        var schedule = resources.getResource(
-                URI.createFileURI(Path.of(args[2]).toAbsolutePath().toString()), true);
-        var supermarket = resources.getResource(
-                URI.createFileURI(Path.of(args[3]).toAbsolutePath().toString()), true);
+        // Load input models
+        var recipeBook = resources.getResource(
+                URI.createFileURI(workspace.resolve("recipebook/model/RecipeBook.xmi").toString()), true);
+        var userPrefs = resources.getResource(
+                URI.createFileURI(workspace.resolve("userPrefrences/model/UserPrefrences.xmi").toString()), true);
+        Path supermarketPath = (args.length > 3)
+                ? Path.of(args[3]).toAbsolutePath()
+                : workspace.resolve("Supermarket/model/Supermarket.xmi");
+        var supermarket = resources.getResource(URI.createFileURI(supermarketPath.toString()), true);
         EcoreUtil.resolveAll(resources);
-        var inputs = new BasicModelExtent(schedule.getContents());
-        var store = new BasicModelExtent(supermarket.getContents());
-        var shopping = new BasicModelExtent();
-        URI transformation = URI.createFileURI(workspace.resolve(
-                "MealTransformations/transforms/ShoppingListPlan/NewTransformation.qvto").toString());
+
+        // M2M 1: RecipeBook + UserPrefrences -> CandidateRecipes
+        var candidatesOut = new BasicModelExtent();
+        runQvt(resources,
+                workspace.resolve("MealTransformations/transforms/CandidateRecipes/FilterCandidateRecipes.qvto"),
+                new ExecutionContextImpl(),
+                new BasicModelExtent(recipeBook.getContents()),
+                new BasicModelExtent(userPrefs.getContents()),
+                candidatesOut);
+        var candidatesResource = saveModel(resources,
+                outputDirectory.resolve("CandidateRecipes.xmi"), candidatesOut);
+
+        // M2M 2: CandidateRecipes + UserPrefrences -> MealSchedule (weighted random)
+        var scheduleOut = new BasicModelExtent();
+        var scheduleCtx = new ExecutionContextImpl();
+        int seed = new Random().nextInt(65536);
+        scheduleCtx.setConfigProperty("randomSeed", seed);
+        scheduleCtx.setConfigProperty("weekNumber", 5);
+        runQvt(resources,
+                workspace.resolve("MealTransformations/transforms/MealSchedulePlan/GenerateMealSchedule.qvto"),
+                scheduleCtx,
+                new BasicModelExtent(candidatesResource.getContents()),
+                new BasicModelExtent(userPrefs.getContents()),
+                scheduleOut);
+        var scheduleResource = saveModel(resources,
+                outputDirectory.resolve("GeneratedMealSchedule.xmi"), scheduleOut);
+
+        // M2M 3: MealSchedule + Supermarket -> ShoppingList
+        var shoppingOut = new BasicModelExtent();
+        runQvt(resources,
+                workspace.resolve("MealTransformations/transforms/ShoppingListPlan/MealScheduleToShoppingList.qvto"),
+                new ExecutionContextImpl(),
+                new BasicModelExtent(scheduleResource.getContents()),
+                new BasicModelExtent(supermarket.getContents()),
+                shoppingOut);
+        var shoppingResource = saveModel(resources,
+                outputDirectory.resolve("GeneratedShoppingList.xmi"), shoppingOut);
+
+        // M2T: Generate HTML outputs
+        generate(resources, scheduleResource, output, "MealScheduleToHTML");
+        generate(resources, shoppingResource, output, "ShoppingListToHTML");
+        System.out.println("Pipeline complete (randomSeed=" + seed + ")");
+    }
+
+    private static void runQvt(ResourceSetImpl resources, Path qvtoPath,
+            ExecutionContextImpl context, BasicModelExtent... extents) {
+        URI transformation = URI.createFileURI(qvtoPath.toString());
         var executor = new TransformationExecutor(transformation, resources.getPackageRegistry());
+        boolean loaded = false;
         try {
             check(executor.loadTransformation());
-            check(executor.execute(new ExecutionContextImpl(), inputs, store, shopping));
+            loaded = true;
+            check(executor.execute(context, extents));
         } finally {
-            executor.cleanup();
+            if (loaded) {
+                executor.cleanup();
+            }
         }
-        var shoppingResource = resources.createResource(
-                URI.createFileURI(outputDirectory.resolve("GeneratedShoppingList.xmi").toString()));
-        shoppingResource.getContents().addAll(shopping.getContents());
-        shoppingResource.save(Map.of(XMLResource.OPTION_ENCODING, "UTF-8",
-                XMLResource.OPTION_SCHEMA_LOCATION, true));
+    }
 
-        generate(resources, schedule, output, "MealScheduleToHTML");
-        generate(resources, shoppingResource, output, "ShoppingListToHTML");
+    private static Resource saveModel(ResourceSetImpl resources, Path path,
+            BasicModelExtent extent) throws Exception {
+        var resource = resources.createResource(URI.createFileURI(path.toString()));
+        resource.getContents().addAll(extent.getContents());
+        resource.save(Map.of(
+                XMLResource.OPTION_ENCODING, "UTF-8",
+                XMLResource.OPTION_SCHEMA_LOCATION, true));
+        return resource;
     }
 
     private static void generate(ResourceSetImpl resources, Resource model, URI output, String moduleName) {

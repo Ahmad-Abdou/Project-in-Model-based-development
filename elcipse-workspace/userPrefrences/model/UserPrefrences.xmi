@@ -4,7 +4,7 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:userPrefrences="http://www.example.org/userPrefrences"
-    xsi:schemaLocation="http://www.example.org/userPrefrences userPrefrences.ecore"
+    xsi:schemaLocation="http://www.example.org/userPrefrences platform:/resource/userPrefrences/model/userPrefrences.ecore"
     numberOfPeople="3"
     weeklyBudget="200.0"
     maxCookingTime="30"

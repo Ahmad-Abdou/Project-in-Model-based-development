@@ -1,0 +1,42 @@
+modeltype Recipes uses "platform:/resource/recipebook/model/recipebook.ecore";
+modeltype Prefs uses "platform:/resource/userPrefrences/model/userPrefrences.ecore";
+modeltype Cand uses "platform:/resource/CandidateRecipes/model/candidateRecipes.ecore";
+transformation FilterCandidateRecipes(
+    in recipeBook : Recipes,
+    in userPrefs : Prefs,
+    out candidates : Cand
+);
+
+main() {
+    log('--- DEBUG START ---');
+    recipeBook.rootObjects()->forEach(o) { log('recipeBook root: ' + o.repr()); };
+    userPrefs.rootObjects()->forEach(o) { log('userPrefs root: ' + o.repr()); };
+    log('Matched RecipeBook: ' + recipeBook.rootObjects()[Recipes::RecipeBook]->size().toString());
+    log('Matched UserPrefrences: ' + userPrefs.rootObjects()[Prefs::UserPrefrences]->size().toString());
+
+    var prefs : Prefs::UserPrefrences := userPrefs.rootObjects()![Prefs::UserPrefrences];
+    recipeBook.rootObjects()[Recipes::RecipeBook]->map toCandidateRecipes(prefs);
+    log('--- DEBUG END ---');
+}
+
+mapping Recipes::RecipeBook::toCandidateRecipes(prefs : Prefs::UserPrefrences) : Cand::CandidateRecipes {
+    recipes := self.recipes->select(r | r.isCandidate(prefs));
+}
+
+query Recipes::Recipe::isCandidate(prefs : Prefs::UserPrefrences) : Boolean {
+    var okTime : Boolean :=
+        (prefs.maxCookingTime <= 0) or (self.timeToCook <= prefs.maxCookingTime);
+
+    var okKcal : Boolean :=
+        (prefs.maxKcal = null) or (prefs.maxKcal <= 0.0)
+        or (self.kcal = null) or (self.kcal <= prefs.maxKcal);
+
+    var hasExcluded : Boolean :=
+        self.ingredients->exists(ri |
+            prefs.excludeIngredients->exists(ex |
+                ri.ingredient = ex or ri.ingredient.name = ex.name
+            )
+        );
+
+    return okTime and okKcal and not hasExcluded;
+}

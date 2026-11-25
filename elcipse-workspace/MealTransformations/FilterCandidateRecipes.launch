@@ -11,13 +11,13 @@
     <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.featureName2" value=""/>
     <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.featureName3" value=""/>
     <booleanAttribute key="org.eclipse.m2m.qvt.oml.interpreter.isInrementalUpdate" value="false"/>
-    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.module" value="platform:/resource/MealTransformations/transforms/ShoppingListPlan/NewTransformation.qvto"/>
-    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetModel1" value="platform:/resource/MealSchedule/model/MealSchedule.xmi"/>
-    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetModel2" value="platform:/resource/Supermarket/model/Supermarket.xmi"/>
-    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetModel3" value="platform:/resource/ShoppingList/model/GeneratedShoppingList.xmi"/>
+    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.module" value="platform:/resource/MealTransformations/transforms/CandidateRecipes/FilterCandidateRecipes.qvto"/>
+    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetModel1" value="platform:/resource/recipebook/model/RecipeBook.xmi"/>
+    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetModel2" value="platform:/resource/userPrefrences/model/UserPrefrences.xmi"/>
+    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetModel3" value="platform:/resource/CandidateRecipes/model/CandidateRecipes.xmi"/>
     <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetType1" value="NEW_MODEL"/>
     <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetType2" value="NEW_MODEL"/>
     <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.targetType3" value="NEW_MODEL"/>
-    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.traceFile" value="platform:/resource/ShoppingList/model/GeneratedShoppingList.NewTransformation.qvtotrace"/>
+    <stringAttribute key="org.eclipse.m2m.qvt.oml.interpreter.traceFile" value="platform:/resource/CandidateRecipes/model/CandidateRecipes.FilterCandidateRecipes.qvtotrace"/>
     <booleanAttribute key="org.eclipse.m2m.qvt.oml.interpreter.useTraceFile" value="false"/>
 </launchConfiguration>

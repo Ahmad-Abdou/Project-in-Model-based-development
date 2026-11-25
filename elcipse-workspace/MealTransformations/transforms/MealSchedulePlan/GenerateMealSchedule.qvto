@@ -1,0 +1,110 @@
+modeltype Recipes uses "platform:/resource/recipebook/model/recipebook.ecore";
+modeltype Prefs uses "platform:/resource/userPrefrences/model/userPrefrences.ecore";
+modeltype Cand uses "platform:/resource/CandidateRecipes/model/candidateRecipes.ecore";
+modeltype Schedule uses "platform:/resource/MealSchedule/model/mealSchedule.ecore";
+
+transformation GenerateMealSchedule(
+    in candidates : Cand,
+    in userPrefs : Prefs,
+    out schedule : Schedule
+);
+
+configuration property randomSeed : Integer;
+configuration property weekNumber : Integer;
+
+property prngState : Integer = 42;
+
+main() {
+    if (randomSeed <> null and randomSeed >= 0) {
+        prngState := randomSeed.mod(65536);
+    };
+
+    var prefs : Prefs::UserPrefrences := userPrefs.rootObjects()![Prefs::UserPrefrences];
+    candidates.rootObjects()[Cand::CandidateRecipes]->map toMealSchedule(prefs);
+}
+
+mapping Cand::CandidateRecipes::toMealSchedule(prefs : Prefs::UserPrefrences) : Schedule::MealSchedule {
+    result.week := if (weekNumber <> null and weekNumber > 0) then weekNumber else 1 endif;
+
+    var allDays : Sequence(String) := Sequence {
+        'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+    };
+    var mealTypes : Sequence(String) := Sequence { 'Breakfast', 'Lunch', 'Dinner' };
+
+    var numDays : Integer := prefs.daysPerWeek;
+    if (numDays <= 0) { numDays := 5; };
+    if (numDays > 7) { numDays := 7; };
+
+    var targetServings : Integer := if (prefs.numberOfPeople > 0) then prefs.numberOfPeople else 1 endif;
+    var pool : Sequence(Recipes::Recipe) := self.recipes->asSequence();
+
+    if (pool->notEmpty()) {
+        allDays->subSequence(1, numDays)->forEach(d) {
+            var usedToday : Set(Recipes::Recipe) := Set{};
+
+            mealTypes->forEach(mType) {
+                var available : Sequence(Recipes::Recipe) := pool->reject(r | usedToday->includes(r));
+                if (available->isEmpty()) {
+                    available := pool;
+                };
+
+                var chosen : Recipes::Recipe := pickWeightedRecipe(available, mType);
+                usedToday := usedToday->including(chosen);
+
+                result.meals += object Schedule::Meal {
+                    day := d;
+                    mealType := mType;
+                    servings := targetServings;
+                    recipe := chosen;
+                };
+            };
+        };
+    };
+}
+
+helper nextRandom(bound : Integer) : Integer {
+    prngState := (prngState * 25173 + 13849).mod(65536);
+    return prngState.mod(bound);
+}
+
+query Recipes::Recipe::weightFor(mealType : String) : Integer {
+    var level : Recipes::Suitability :=
+        if (mealType = 'Breakfast') then self.breakfastSuitability
+        elif (mealType = 'Lunch') then self.lunchSuitability
+        else self.dinnerSuitability
+        endif;
+
+    return
+        if (level = Recipes::Suitability::APPROPRIATE) then 6
+        elif (level = Recipes::Suitability::SO_SO) then 2
+        else 1
+        endif;
+}
+
+helper pickWeightedRecipe(pool : Sequence(Recipes::Recipe), mealType : String) : Recipes::Recipe {
+    var totalWeight : Integer := 0;
+    pool->forEach(r) {
+        totalWeight := totalWeight + r.weightFor(mealType);
+    };
+
+    if (totalWeight <= 0) {
+        return pool->at(nextRandom(pool->size()) + 1);
+    };
+
+    var roll : Integer := nextRandom(totalWeight);
+    var cumulative : Integer := 0;
+    var selected : Recipes::Recipe := pool->first();
+    var found : Boolean := false;
+
+    pool->forEach(r) {
+        if (not found) {
+            cumulative := cumulative + r.weightFor(mealType);
+            if (roll < cumulative) {
+                selected := r;
+                found := true;
+            };
+        };
+    };
+
+    return selected;
+}

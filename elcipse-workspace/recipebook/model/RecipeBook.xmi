@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<recipebook:RecipeBook xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:recipebook="http://www.example.org/recipebook" xsi:schemaLocation="http://www.example.org/recipebook platform:/resource/recipebook/model/recipebook.ecore">
-  <recipes name="PastaWithMeatballs" servings="2" timeToCook="10" instructions="Mix seasoned ground meat into small balls and simmer them in a tomato sauce while boiling pasta. Toss the cooked pasta directly into the meatball sauce and serve hot" carbs="50.0" protein="25.0" fats="30.0" kcal="500.0">
+<recipebook:RecipeBook xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:recipebook="http://www.example.org/recipebook"
+    xsi:schemaLocation="http://www.example.org/recipebook platform:/resource/recipebook/model/recipebook.ecore">
+  <recipes name="PastaWithMeatballs" servings="2" timeToCook="10"
+      instructions="Mix seasoned ground meat into small balls and simmer them in tomato sauce while boiling pasta."
+      carbs="50.0" protein="25.0" fats="30.0" kcal="500.0"
+      breakfastSuitability="INAPPROPRIATE" lunchSuitability="APPROPRIATE" dinnerSuitability="APPROPRIATE">
     <ingredients quantity="250.0" unit="gr" ingredient="//@ingredients.0"/>
     <ingredients quantity="200.0" unit="gr" ingredient="//@ingredients.1"/>
   </recipes>
-   <recipes name="V_Byriani" servings="3" timeToCook="30" instructions="Sauté sliced onions and peppers in oil until soft, then mix in spices and cooked basmati rice. Cover and steam on low heat for a few minutes until warm and well combined" carbs="150.0" protein="30.0" fats="45.0" kcal="650.0">
+  <recipes name="V_Byriani" servings="3" timeToCook="30"
+      instructions="Saute sliced onions and peppers in oil until soft, mix in spices and cooked rice, and steam."
+      carbs="150.0" protein="30.0" fats="45.0" kcal="650.0"
+      breakfastSuitability="INAPPROPRIATE" lunchSuitability="APPROPRIATE" dinnerSuitability="APPROPRIATE">
     <ingredients quantity="1000.0" unit="gr" ingredient="//@ingredients.2"/>
     <ingredients quantity="400.0" unit="gr" ingredient="//@ingredients.3"/>
     <ingredients quantity="150.0" unit="gr" ingredient="//@ingredients.4"/>
     <ingredients quantity="100.0" unit="ml" ingredient="//@ingredients.5"/>
+  </recipes>
+  <recipes name="OatmealBowl" servings="1" timeToCook="10"
+      instructions="Simmer oats in milk for 8 minutes and serve warm."
+      carbs="45.0" protein="12.0" fats="8.0" kcal="310.0"
+      breakfastSuitability="APPROPRIATE" lunchSuitability="SO_SO" dinnerSuitability="INAPPROPRIATE">
+    <ingredients quantity="80.0" unit="gr" ingredient="//@ingredients.6"/>
+    <ingredients quantity="250.0" unit="ml" ingredient="//@ingredients.7"/>
+  </recipes>
+  <recipes name="VeggieOmelette" servings="2" timeToCook="12"
+      instructions="Whisk eggs, saute diced peppers and onions in oil, pour eggs and cook until set."
+      carbs="10.0" protein="22.0" fats="18.0" kcal="290.0"
+      breakfastSuitability="APPROPRIATE" lunchSuitability="APPROPRIATE" dinnerSuitability="SO_SO">
+    <ingredients quantity="4.0" unit="pcs" ingredient="//@ingredients.8"/>
+    <ingredients quantity="100.0" unit="gr" ingredient="//@ingredients.3"/>
+    <ingredients quantity="50.0" unit="gr" ingredient="//@ingredients.4"/>
+    <ingredients quantity="15.0" unit="ml" ingredient="//@ingredients.5"/>
+  </recipes>
+  <recipes name="FriedRice" servings="2" timeToCook="20"
+      instructions="Stir-fry cooked rice with eggs, onions, and peppers in oil."
+      carbs="75.0" protein="18.0" fats="20.0" kcal="540.0"
+      breakfastSuitability="SO_SO" lunchSuitability="APPROPRIATE" dinnerSuitability="APPROPRIATE">
+    <ingredients quantity="300.0" unit="gr" ingredient="//@ingredients.2"/>
+    <ingredients quantity="2.0" unit="pcs" ingredient="//@ingredients.8"/>
+    <ingredients quantity="100.0" unit="gr" ingredient="//@ingredients.4"/>
+    <ingredients quantity="30.0" unit="ml" ingredient="//@ingredients.5"/>
+  </recipes>
+  <recipes name="SlowBraisedFeast" servings="4" timeToCook="90"
+      instructions="Slow-cook rice and vegetables for 90 minutes."
+      carbs="95.0" protein="25.0" fats="40.0" kcal="950.0"
+      breakfastSuitability="INAPPROPRIATE" lunchSuitability="SO_SO" dinnerSuitability="APPROPRIATE">
+    <ingredients quantity="500.0" unit="gr" ingredient="//@ingredients.2"/>
+    <ingredients quantity="200.0" unit="gr" ingredient="//@ingredients.3"/>
   </recipes>
   <ingredients name="Pasta" category="Dry Goods"/>
   <ingredients name="Tomato" category="Vegetables"/>
@@ -16,4 +57,7 @@
   <ingredients name="Pepper" category="Vegetables"/>
   <ingredients name="Onion" category="Vegetables"/>
   <ingredients name="Oil" category="Pantry"/>
+  <ingredients name="Oats" category="Dry Goods"/>
+  <ingredients name="Milk" category="Dairy"/>
+  <ingredients name="Eggs" category="Dairy"/>
 </recipebook:RecipeBook>
